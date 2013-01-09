@@ -30,32 +30,101 @@
 
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <h1>Dojo with Ruby on Rails</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>I haven't found a good implementation of the cool javascript Dojo toolkit library so I decided to release my own gem. This gem allows you to use the full dojo suite in your <a href="http://github.com/rails/rails">Ruby on Rails</a> application. The project is divided into three gems dojo-rails, <a href="https://github.com/robin850/dijit-rails">dijit-rails</a> and <a href="https://github.com/robin850/dojox-rails">dojox-rails</a>. </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>This repository used to host each project's folder but there are now in their own repository. This one host dojo itself (the base and full version).</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p><strong>Notice</strong> : these gems aren't very stable for the moment. You must be aware of that. </p>
 
-<h3>Designer Templates</h3>
+<h2>Installation and use</h2>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>To use these gems, you should edit the <code>Gemfile</code> of your application and add the following line:</p>
 
-<h3>Rather Drive Stick?</h3>
+<div class="highlight"><pre><span class="n">gem</span> <span class="s1">'dojo-rails'</span>
+</pre></div>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Then run the <code>bundle</code> command to install it. Now, inside your javascript assets, you can use dojo? If you want more information on how to set-up and use one of these gems in your application, please see <a href="https://github.com/robin850/dojo-rails/wiki">the wiki</a>.</p>
 
-<h3>Authors and Contributors</h3>
+<p>Notice that <code>dojo-rails</code> provides both the base and full distribution of the toolkit. If you just the want the base distribution, in your js file, add:</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight"><pre><span class="c1">//= require dojo</span>
+</pre></div>
 
-<h3>Support or Contact</h3>
+<p>And for the full version:</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<div class="highlight"><pre><span class="c1">//= require dojo/dojo</span>
+</pre></div>
+
+<p>That's it! It may seem obvious but you can also use <a href="http://coffeescript.org">CoffeeScript</a> in your files. Here an example <a href="http://dojotoolkit.org/reference-guide/1.8/">reference guide</a>:</p>
+
+<div class="highlight"><pre><span class="c1">#= require dojo</span>
+<span class="nx">require</span><span class="p">([</span><span class="s">"dojo/router"</span><span class="p">,</span> <span class="s">"dojo/dom"</span><span class="p">,</span> <span class="s">"dojo/fx"</span><span class="p">,</span> <span class="s">"dojo/domReady!"</span><span class="p">],</span> <span class="nf">(router, dom, fx) -&gt;</span>
+  <span class="nx">router</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s">"/articles/:id"</span><span class="p">,</span> <span class="nf">(evt) -&gt;</span>
+    <span class="nx">alert</span> <span class="s">"The article has the id "</span> <span class="o">+</span> <span class="nx">evt</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span>
+  <span class="p">)</span>
+  <span class="nx">router</span><span class="p">.</span><span class="nx">startup</span><span class="p">()</span>
+
+  <span class="nv">greeting = </span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s">"greeting"</span><span class="p">)</span>
+  <span class="nx">greeting</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s">" from Dojo!"</span>
+
+  <span class="nx">fx</span><span class="p">.</span><span class="nx">slideTo</span><span class="p">({</span>
+    <span class="nv">top: </span><span class="mi">100</span><span class="p">,</span>
+    <span class="nv">left: </span><span class="mi">200</span><span class="p">,</span>
+    <span class="nv">node: </span><span class="nx">greeting</span>
+  <span class="p">}).</span><span class="nx">play</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+
+<h3>Troubleshooting</h3>
+
+<p>One of the worst problem when you use dojo-rails and Coffeescript together is that sometimes, Dojo defines functions which are reserved keyword in Coffeescript such as <code>then</code> with <code>dojo/request</code> or the <code>dojo/on</code> module that you will certainly name <code>on</code>. Except rename modules, there is no real solution such as for the <code>then</code> function. If you have a solution, <strong>please let me know</strong>!</p>
+
+<h2>Usage with Asset Pipeline in Production</h2>
+
+<p>To use with production and asset pipeline from Rails 3.1 you will need to have the <a href="http://dojotoolkit.org/documentation/tutorials/1.8/dojo_config/">djConfig</a> hash set before you load the dojo/dojo library</p>
+
+<p><em>This is critical for production mode because otherwise the require[ ] statements will not load libraries correctly</em></p>
+
+<p>Example contents of application.js</p>
+
+<div class="highlight"><pre><span class="o">//=</span> <span class="nx">require</span> <span class="nx">dojo_config</span>
+<span class="o">//=</span> <span class="nx">require</span> <span class="nx">dojo</span><span class="o">/</span><span class="nx">dojo</span>
+</pre></div>
+
+<p>Contents of dojo_config.js</p>
+
+<div class="highlight"><pre><span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s1">'/assets/dojo/'</span>
+<span class="p">};</span>
+</pre></div>
+
+<h2>Special thanks</h2>
+
+<p>I want to thanks the <a href="http://github.com/rails/jquery-rails">jquery-rails</a> project ; it helps me to release theses three projects. I would also thanks the <a href="http://github.com/rails/">Ruby on Rails team</a> and its contributors. Thanks guys!</p>
+
+<h2>Contribution</h2>
+
+<h3>Code</h3>
+
+<p>If you want to contribute to the code of the project to enhance a gem or the full suite, thanks ! You just have to :</p>
+
+<ul>
+<li>Fork the project</li>
+<li>Clone the repository on your local machine</li>
+<li>Create a new branch with <code>git checkout -b new_feature</code>
+</li>
+<li>Make changes and commit them</li>
+<li><code>git push origin master</code></li>
+<li>Open a new pull request</li>
+</ul><h3>Bugs and issues</h3>
+
+<p>If you found bug or if you have issues, please open a <a href="https://github.com/robin850/dojo-rails/issues/new">new ticket</a> on the issue tracker. Thank you a lot!</p>
+
+<h2>License</h2>
+
+<p>This project is released under the MIT license. See the <code>LICENSE</code> file for more information. Dojo Toolkit is available under either the terms of the modified BSD license or the Academic Free License version 2.1. Please see the <code>DOJO_LICENSE</code> file or <a href="http://dojotoolkit.org/license">visit the official page</a> for more information.</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
